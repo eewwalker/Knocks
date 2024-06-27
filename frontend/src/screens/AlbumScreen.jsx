@@ -1,11 +1,22 @@
 import { useParams, Link } from "react-router-dom";
-import albums from "../albums";
+import { useState, useEffect } from "react";
 import { Row, Col, Image, ListGroup, Button} from 'react-bootstrap';
 import Rating from "../components/Rating";
 
+
 const AlbumScreen = () => {
+    const [album, setAlbum] = useState({});
     let { id } = useParams();
-    const album = albums.find(a => a._id === id);
+
+    useEffect(()=> {
+        async function fetchAlbumDetails() {
+            const response = await fetch(`http://localhost:3000/api/albums/${id}`);
+            const data = await response.json();
+            setAlbum(data);
+            console.log(data)
+        }
+        fetchAlbumDetails()
+    },[id])
 
     return (
         <>
